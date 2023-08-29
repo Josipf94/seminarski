@@ -1,3 +1,8 @@
+:root {
+  --current-user-color: #db7878; /* Postavite boju za poruke trenutnog korisnika */
+  --other-user-color: #a6d9ff; /* Postavite boju za poruke drugih korisnika */
+}
+
 .App {
   text-align: center;
 }
@@ -7,15 +12,9 @@
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 20vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,15 +23,40 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* Stilizacija za poruke */
+.Message {
+  padding: 0.7em;
+  margin-bottom: 0.3em;
+  border-radius: 0.5em;
+  color: #000000; /* Boja teksta za poruke */
+  overflow-wrap: break-word; /* Prijelom teksta unutar poruke */
+  width: fit-content;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Message-text {
+  font-size: 1em;
+}
+
+.Member-username {
+  font-weight: bold;
+}
+
+/* Dodano za stilizaciju poruka */
+.Messages-list {
+  display: flex;
+  flex-direction: column; /* Promijenite smjer redoslijeda */
+  align-items: flex-start; /* Poruke i korisnička imena će biti s lijeve strane */
+  height: 500px; /* Prilagodite visinu prema želji */
+  overflow-y: auto; /* Dodajte klizanje ako je potrebno */
+}
+
+.Message.MyMessage {
+  align-self: flex-end;
+  background-color: var(--current-user-color);
+}
+
+/* Stilovi za poruke koje su poslali drugi korisnici */
+.Message.OtherMessage {
+  align-self: flex-start;
+  background-color: var(--other-user-color);
 }
