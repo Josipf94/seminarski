@@ -1,19 +1,9 @@
-:root {
-  --current-user-color: #db7878; /* Postavite boju za poruke trenutnog korisnika */
-  --other-user-color: #a6d9ff; /* Postavite boju za poruke drugih korisnika */
-}
-
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 .App-header {
-  background-color: #282c34;
+  background-color: #305091;
   min-height: 20vh;
   display: flex;
   flex-direction: column;
@@ -21,33 +11,66 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  box-shadow: 0 5px 10px rgb(169, 169, 169);
+  text-shadow: 2px 2px #161616;
 }
 
-/* Stilizacija za poruke */
+.Input input {
+  width: 50%;
+  padding: 10px;
+  font-size: 16px;
+  box-shadow: 0 0 10px #305091;
+  border: none;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #305091;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
 .Message {
   padding: 0.7em;
-  margin-bottom: 0.3em;
+  margin-bottom: 0.8em;
   border-radius: 0.5em;
-  color: #000000; /* Boja teksta za poruke */
-  overflow-wrap: break-word; /* Prijelom teksta unutar poruke */
+  color: #ffffff;
+  overflow-wrap: break-word;
   width: fit-content;
+  box-shadow: 0 3px 5px rgb(169, 169, 169);
 }
 
 .Message-text {
-  font-size: 1em;
+  font-size: 1.2em;
+  text-shadow: rgb(10, 10, 10) 0px 0px 3px;
 }
 
 .Member-username {
+  font-size: 1.2em;
   font-weight: bold;
+  color: black;
+  text-shadow: rgb(255, 255, 255) 0px 0px 4px;
 }
 
-/* Dodano za stilizaciju poruka */
 .Messages-list {
   display: flex;
-  flex-direction: column; /* Promijenite smjer redoslijeda */
-  align-items: flex-start; /* Poruke i korisnička imena će biti s lijeve strane */
-  height: 500px; /* Prilagodite visinu prema želji */
-  overflow-y: auto; /* Dodajte klizanje ako je potrebno */
+  flex-direction: column;
+  align-items: flex-start;
+  height: 60vh;
+  overflow-y: auto;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: 30px;
+  margin-bottom: 5%;
 }
 
 .Message.MyMessage {
@@ -55,7 +78,6 @@
   background-color: var(--current-user-color);
 }
 
-/* Stilovi za poruke koje su poslali drugi korisnici */
 .Message.OtherMessage {
   align-self: flex-start;
   background-color: var(--other-user-color);

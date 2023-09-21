@@ -1,38 +1,33 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
-class Input extends Component {
-  state = {
-    text: '',
+const Input = (props) => {
+  const [text, setText] = useState('');
+  const onChange = (e) => {
+    setText(e.target.value);
   };
 
-  render() {
-    return (
-      <div className='Input'>
-        <form onSubmit={(e) => this.onSubmit(e)}>
-          <input
-            onChange={(e) => this.onChange(e)}
-            value={this.state.text}
-            type='text'
-            placeholder='Unesite poruku i pritisnite ENTER'
-            autoFocus
-          />
-          <button>Posalji</button>
-        </form>
-      </div>
-    );
-  }
-
-  onChange(e) {
-    this.setState({ text: e.target.value });
-  }
-
-  onSubmit(e) {
+  const onSubmit = (e) => {
     e.preventDefault();
-    if (this.state.text.trim() !== '') {
-      this.props.onSendMessage(this.state.text);
-      this.setState({ text: '' });
+    if (text.trim() !== '') {
+      props.onSendMessage(text);
+      setText('');
     }
-  }
-}
+  };
+
+  return (
+    <div className='Input'>
+      <form onSubmit={(e) => onSubmit(e)}>
+        <input
+          onChange={(e) => onChange(e)}
+          value={text}
+          type='text'
+          placeholder='Unesite poruku i pritisnite ENTER'
+          autoFocus
+        />
+        <button>Pošalji</button>
+      </form>
+    </div>
+  );
+};
 
 export default Input;

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import './App.css';
+import { useEffect, useState } from 'react';
 import Messages from './Messages';
 import Input from './Input';
 
@@ -7,78 +7,75 @@ function randomColor() {
   return '#' + Math.floor(Math.random() * 0xffffff).toString(16);
 }
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      messages: [],
-      member: {
-        username: '',
-        color: randomColor(),
-      },
-    };
+const App = () => {
+  const [user, setUser] = useState();
+  const [messages, setMessages] = useState([]);
+  const [drone, setDrone] = useState();
 
-    this.drone = new window.Scaledrone('FNHqOKcAeXcQwp8y', {
-      data: this.state.member,
-    });
-  }
-
-  componentDidMount() {
-    const { member } = this.state;
-
-    if (!member.username) {
-      const username = prompt('Unesite svoje ime:');
-      while (!username) {
-        alert('Unesite svoje ime!');
-      }
-
-      console.log('Uneseno korisničko ime:', username); // Dodajte ovu liniju
-      member.username = username;
-      member.id = this.drone.clientId;
-      this.setState({ member }, () => {
-        this.initializeChat();
-      });
-    } else {
-      this.initializeChat();
+  useEffect(() => {
+    let username = undefined;
+    while (!username) {
+      username = prompt('Unesite svoje ime:');
     }
-  }
 
-  initializeChat = () => {
-    const room = this.drone.subscribe('observable-room');
+    console.log('Uneseno korisničko ime:', username);
+
+    setUser({
+      username: username,
+      color: randomColor(),
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!user || drone) return;
+
+    setDrone(
+      new window.Scaledrone('FNHqOKcAeXcQwp8y', {
+        data: user,
+      })
+    );
+  }, [user, drone]);
+
+  useEffect(() => {
+    if (!drone) return;
+    const room = drone.subscribe('observable-room');
     room.on('data', (data, member) => {
-      this.setState((prevState) => ({
-        messages: [...prevState.messages, { member, text: data }],
-      }));
+      setMessages((prevState) => {
+        return [
+          ...prevState,
+          { member, text: data, username: member.clientData.username },
+        ];
+      });
     });
 
-    this.drone.on('open', (error) => {
+    drone.on('open', (error) => {
+      setUser((prevState) => ({ ...prevState, id: drone.clientId }));
       if (error) {
         return console.error(error);
       }
     });
-  };
+  }, [drone]);
 
-  onSendMessage = (message) => {
-    this.drone.publish({
+  const onSendMessage = (message) => {
+    drone.publish({
       room: 'observable-room',
       message,
     });
   };
 
-  render() {
-    return (
-      <div className='App'>
-        <div className='App-header'>
-          <h1>My Chat App</h1>
-        </div>
-        <Messages
-          messages={this.state.messages}
-          currentMember={this.state.member}
-        />
-        <Input onSendMessage={this.onSendMessage} />
-      </div>
-    );
+  if (!drone || !user || !user.id) {
+    return <></>;
   }
-}
+
+  return (
+    <div className='App'>
+      <div className='App-header'>
+        <h1>Chat Aplikacija</h1>
+      </div>
+      <Messages messages={messages} currentMember={user} />
+      <Input onSendMessage={onSendMessage} />
+    </div>
+  );
+};
 
 export default App;
